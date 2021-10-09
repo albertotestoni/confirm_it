@@ -1,0 +1,93 @@
+{
+ "lstm": {
+   "no_hidden_encoder": 768,
+   "dropout": 0.0
+ },
+
+ "mlp": {
+   "layer_sizes": [1024, 128, 3]
+ },
+
+ "inputs": {
+   "question": true,
+   "obj_categories": false,
+   "spatial": true,
+   "visual": false,
+   "crop": true,
+   "scale_visual_to": 512,
+   "no_visual_feat": 2048,
+   "no_crop_feat": 2048,
+   "LXRTEncoder": {
+     "llayers": 9,
+     "xlayers": 5,
+     "rlayers": 5,
+     "from_scratch": false,
+     "model_path": "/mnt/8tera/claudio.greco/guesswhat_lxmert/guesswhat/lxmert/snap/pretrained/model"
+    }
+ },
+
+ "embeddings": {
+    "no_words_feat": 300,
+    "no_category_feat": 512,
+    "no_categories": 91
+  },
+
+  "optimizer": {
+    "lr": 0.00001,
+    "no_epochs": 15,
+    "batch_size": 32
+  },
+
+  "dataset": {
+    "max_src_length": 15,
+    "min_occ":3,
+    "new_oracle_data": false,
+    "new_vocab": false,
+    "successful_only": true,
+    "history": false
+  },
+
+  "exp_config": {
+    "name": "Oracle",
+    "description": "experiment description",
+    "logging": false,
+    "save_models": true,
+    "save_models_path": "./bin/Oracle/",
+    "tb_logdir": "./logs/",
+    "seed": 1,
+    "splits": ["train", "val"]
+  },
+
+  "data_paths": {
+
+    "train_file": "guesswhat.train.jsonl.gz",
+    "val_file": "guesswhat.valid.jsonl.gz",
+    "test_file":"guesswhat.test.jsonl.gz",
+    "vocab_file": "vocab.json",
+
+    "oracle_bin_file": "./bin/Oracle/oracle",
+
+    "vgg": {
+      "image_features": "VGG_image_features4096.h5",
+      "img2id": "VGG_img_features2id4096.json",
+      "crop_features": "VGG_crops_features4096.h5",
+      "crop2id": "VGG_crops_features2id4096.json"
+    },
+
+    "rss": {
+      "image_features": "ResNet_avg_image_features.h5",
+      "img2id": "ResNet_avg_image_features2id.json",
+      "crop_features": "ResNetcrop_features.h5",
+      "crop2id": "ResNetcrop_features2id.json"
+    },
+    
+    "FasterRCNN": {
+      "train": "./lxmert/data/mscoco_imgfeat/train2014_obj36.tsv",
+      "val": "./lxmert/data/mscoco_imgfeat/val2014_obj36.tsv",
+      "mscoco_bottomup_index": "/mnt/8tera/claudio.greco/guesswhat_lxmert/guesswhat/lxmert/data/mscoco_imgfeat/mscoco_bottomup_info.json",
+      "mscoco_bottomup_features": "/dev/shm/mscoco_bottomup_features.npy",
+      "mscoco_bottomup_features_2": "/mnt/8tera/claudio.greco/guesswhat_lxmert/guesswhat/lxmert/data/mscoco_imgfeat/mscoco_bottomup_features.npy",
+      "mscoco_bottomup_boxes": "/mnt/8tera/claudio.greco/guesswhat_lxmert/guesswhat/lxmert/data/mscoco_imgfeat/mscoco_bottomup_boxes.npy"
+    }
+  }
+}
