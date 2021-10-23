@@ -13,14 +13,16 @@ CUDA_VISIBLE_DEVICES=0 python -m train.SL.train_confirm_it_3tasks -modulo 7 -no_
 ```
 
 ## Inference
-Run *inference_confirm_it.py*.
+To run the inference on the test set, run the following command (in this case, we use the pre-trained model provided):
 
-*Detailed instructions coming soon*
+ ```
+CUDA_VISIBLE_DEVICES=0 python -m train.GamePlay.inference_confirm_it -exp_name inference -load_bin_path data/model_ensemble_3tasks_mod7_E_28
+```
 
 ## Reference
 
 ```
-@inproceedings{testoni2021confirm_it,
+@inproceedings{testoni2021confirm,
   title = {Looking for Confirmations: An Effective and Human-Like Visual Dialogue Strategy},
   author = {Alberto Testoni and Raffaella Bernardi},
   booktitle = {Proceedings of The 2021 Conference on Empirical Methods in Natural Language Processing, EMNLP 2021},
