@@ -72,7 +72,7 @@
   },
 
   "data_paths": {
-    "image_path":"/mnt/8tera/claudio.greco/guesswhat_lxmert/guesswhat/data/",
+    "image_path":"data",
     "train": "guesswhat.train.jsonl.gz",
     "val": "guesswhat.valid.jsonl.gz",
     "test":"guesswhat.test.jsonl.gz",
@@ -86,11 +86,7 @@
     },
    "ResNet": {
       "image_features": "ResNet_avg_image_features.h5",
-      "img2id": "ResNet_avg_image_features2id.json",
-      "objects_features": "/dev/shm/objects_features.h5",
-      "objects_features_index": "objects_features_index.json",
-      "objects_features_test": "/mnt/8tera/claudio.greco/guesswhat_lxmert/guesswhat/data/objects_features_test.h5",
-      "objects_features_index_test": "/mnt/8tera/claudio.greco/guesswhat_lxmert/guesswhat/data/objects_features_index_test.json"
+      "img2id": "ResNet_avg_image_features2id.json"
     }
   }
 }

@@ -18,13 +18,11 @@ from models.Ensemble_Confirm_it_3tasks import Ensemble
 from train.SL.parser import preprocess_config
 from train.SL.vis import Visualise
 from utils.datasets.SL.N2NDataset_3tasks import N2NDataset
-from utils.datasets.SL.N2NResNetDataset import N2NResNetDataset
 from utils.eval import calculate_accuracy
 from utils.wrap_var import to_var
 from torch.autograd import Variable
 
-# TODO Make this capitalised everywhere to inform it is a global variable
-use_cuda = torch.cuda.is_available()
+USE_CUDA = torch.cuda.is_available()
 
 
 def calculate_accuracy_oracle(predictions, targets):
@@ -72,16 +70,16 @@ if __name__ == '__main__':
         with open(model_dir+'args.json', 'w') as f:
             json.dump(vars(args), f) # converting args.namespace to dict
 
-    float_tensor = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
+    float_tensor = torch.cuda.FloatTensor if USE_CUDA else torch.FloatTensor
     torch.manual_seed(exp_config['seed'])
-    if use_cuda:
+    if USE_CUDA:
         torch.cuda.manual_seed_all(exp_config['seed'])
 
     # Init Model
     model = Ensemble(**ensemble_args)
     # TODO Checkpoint loading
 
-    if use_cuda:
+    if USE_CUDA:
         model.cuda()
         model = DataParallel(model)
     print(model)
@@ -89,7 +87,7 @@ if __name__ == '__main__':
     if args.resnet:
         cnn = ResNet()
 
-        if use_cuda:
+        if USE_CUDA:
             cnn.cuda()
             cnn = DataParallel(cnn)
 
@@ -107,17 +105,10 @@ if __name__ == '__main__':
     # For the Oracle
     oracle_loss_function = nn.CrossEntropyLoss()
 
-    # TODO Use different optimizers for different modules if required.
     optimizer = optim.Adam(model.parameters(), optimizer_args['lr'])
 
-    if args.resnet:
-        #This was for the new image case, we don't use it
-        #Takes too much time.
-        dataset_train = N2NResNetDataset(split='train', **dataset_args)
-        dataset_val = N2NResNetDataset(split='val', **dataset_args)
-    else:
-        dataset_train = N2NDataset(split='train', **dataset_args)
-        dataset_val = N2NDataset(split='val', **dataset_args)
+    dataset_train = N2NDataset(split='train', **dataset_args)
+    dataset_val = N2NDataset(split='val', **dataset_args)
 
     if exp_config['logging']:
         exp_config['model_name'] = 'ensemble'
@@ -170,7 +161,7 @@ if __name__ == '__main__':
                 dataset=dataset,
                 batch_size=optimizer_args['batch_size'],
                 shuffle=False,
-                pin_memory=use_cuda,
+                pin_memory=USE_CUDA,
                 drop_last=False,
                 num_workers=0
             )
@@ -181,8 +172,8 @@ if __name__ == '__main__':
                 model.eval()
 
             for i_batch, sample in tqdm.tqdm(enumerate(dataloader), total=len(dataloader), ncols=50):
-                if i_batch > 200 and args.breaking:
-                    print('Breaking after processing 60 batch')
+                if i_batch > 100 and args.breaking:  # for debug
+                    print('Breaking after processing 100 batch')
                     break
 
                 sample['tgt_len'], ind = torch.sort(sample['tgt_len'], 0, descending=True)
@@ -247,7 +238,7 @@ if __name__ == '__main__':
                             target_cat = sample['target_cat'][mask]
                         )
 
-                        word_logits_loss += _cross_entropy(qgen_out.view(-1, 4901), sample['target_q'][mask].view(-1)) #TODO remove this hardcoded number
+                        word_logits_loss += _cross_entropy(qgen_out.view(-1, 4901), sample['target_q'][mask].view(-1))
 
                         decider_loss +=  ensemble_args['decider']['ask_weight'] * decider_cross_entropy(decider_out.squeeze(1), sample['decider_tgt'][mask])
                         ask_accuracy = calculate_accuracy( decider_out.squeeze(1), sample['decider_tgt'][mask])
