@@ -20,7 +20,7 @@ CUDA_VISIBLE_DEVICES=0 python -m train.GamePlay.inference_confirm_it -exp_name i
 ```
 
 ## Reference
-
+You can find our paper on arXiv: https://arxiv.org/abs/2109.05312
 ```
 @inproceedings{testoni2021confirm,
   title = {Looking for Confirmations: An Effective and Human-Like Visual Dialogue Strategy},
