@@ -46,7 +46,7 @@ class Ensemble(nn.Module):
 
         self.guesser = Guesser(**self.ensemble_args['guesser'])
 
-        with open('../guesswhat-lxmert/config/Oracle/config.json') as in_file:
+        with open('config/Oracle/config.json') as in_file:
             oracle_config = json.load(in_file)
 
         self.oracle = Oracle(
