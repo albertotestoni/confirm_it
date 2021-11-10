@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import json
 from utils.wrap_var import to_var
-
 use_cuda = torch.cuda.is_available()
 
 
@@ -28,9 +27,9 @@ class QGenSeq2Seq(nn.Module):
         'scale_visual_to' : Dimension to reduce the visual features to.
         """
 
-        with open("/mnt/8tera/claudio.greco/guesswhat_lxmert/guesswhat/data/vocab.json") as in_file:
-            self.vocab = json.load(in_file)["i2word"]
-            print("vocab")
+        # with open(os.path.join('data/vocab.json')) as in_file:
+        #     self.vocab = json.load(in_file)["i2word"]
+        #     print("vocab")
 
         self.qgen_args = kwargs
 
@@ -62,13 +61,13 @@ class QGenSeq2Seq(nn.Module):
         self.vocabSize =  self.qgen_args['vocab_size']
         self.logSoftmax = nn.LogSoftmax(dim=1)
 
-    def idx2sentence(self, tokens):
-        s=[]
-        for t in tokens.data:
-            s.append(self.vocab[str(int(t))])
-            if int(t)==12:
-                break
-        return s
+    # def idx2sentence(self, tokens):
+    #     s=[]
+    #     for t in tokens.data:
+    #         s.append(self.vocab[str(int(t))])
+    #         if int(t)==12:
+    #             break
+    #     return s
 
     def forward(self, **kwargs):
         """
